@@ -1,0 +1,561 @@
+html::before {
+  content: 'CodePen ♥ The Web';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  margin: auto;
+  width: fit-content;
+  height: fit-content;
+  font-family: monospace;
+  opacity: 0.6;
+}
+ 
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+ 
+body {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #fbe4e6, #f6d9dd);
+  font-family: 'Georgia', serif;
+  overflow: hidden;
+}
+ 
+.card {
+  position: relative;
+  width: 420px;
+  max-width: 92vw;
+  height: 560px;
+  background: linear-gradient(160deg, #fdeef0, #f8dde0);
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(122, 20, 40, 0.25);
+  overflow: hidden;
+}
+ 
+.scene {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+ 
+/* ---------- Scene 1: closed envelope ---------- */
+.scene-closed {
+  opacity: 1;
+  transform: translateY(0);
+}
+ 
+.title {
+  font-style: italic;
+  font-size: 30px;
+  color: #6e0f22;
+  margin-bottom: 45px;
+  letter-spacing: 1px;
+}
+ 
+.hint {
+  margin-top: 35px;
+  font-size: 13px;
+  color: #9a4a56;
+  letter-spacing: 2px;
+  text-transform: lowercase;
+}
+ 
+.envelope {
+  position: relative;
+  width: 220px;
+  height: 150px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+ 
+.envelope:hover {
+  transform: scale(1.03);
+}
+ 
+.envelope .body {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  background: #7a1020;
+  border-radius: 4px;
+  box-shadow: inset 0 0 0 2px rgba(0,0,0,0.15);
+}
+ 
+.envelope .flap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 0;
+  border-left: 110px solid transparent;
+  border-right: 110px solid transparent;
+  border-top: 85px solid #8c1526;
+  z-index: 2;
+}
+ 
+/* ---------- Scene 2: page 2 with popping items ---------- */
+.scene-page2 {
+  opacity: 0;
+  pointer-events: none;
+  gap: 38px;
+}
+ 
+.card.opened .scene-closed {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-20px);
+}
+ 
+.card.opened .scene-page2 {
+  opacity: 1;
+  pointer-events: auto;
+}
+ 
+.card.show-note .scene-page2 {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-20px);
+}
+ 
+.item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  opacity: 0;
+  transform: scale(0.4);
+  cursor: pointer;
+  transition: transform 0.55s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.35s ease;
+}
+ 
+.card.opened .item-1 {
+  transition-delay: 0.15s;
+}
+.card.opened .item-2 {
+  transition-delay: 0.35s;
+}
+.card.opened .item-3 {
+  transition-delay: 0.55s;
+}
+ 
+.card.opened .item {
+  opacity: 1;
+  transform: scale(1);
+}
+ 
+.icon-box {
+  width: 72px;
+  height: 72px;
+  background: #fffdf9;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 16px rgba(122, 20, 40, 0.18);
+  transition: transform 0.2s ease;
+}
+ 
+.item:hover .icon-box {
+  transform: scale(1.06);
+}
+ 
+.item-label {
+  font-size: 14px;
+  color: #6e0f22;
+  font-style: italic;
+  letter-spacing: 0.5px;
+}
+ 
+/* ---------- Scene 3: Note for MJ ---------- */
+.scene-note {
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.85);
+  padding: 26px 26px 30px;
+  justify-content: flex-start;
+  gap: 0;
+}
+ 
+.card.show-note .scene-note {
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1);
+}
+ 
+.back-btn {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: none;
+  background: #fffdf9;
+  color: #6e0f22;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(122, 20, 40, 0.2);
+  z-index: 5;
+  transition: transform 0.2s ease;
+}
+ 
+.back-btn:hover {
+  transform: scale(1.08);
+}
+ 
+.note-photo-wrap {
+  width: 190px;
+  height: 190px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin: 34px auto 18px;
+  box-shadow: 0 10px 24px rgba(122, 20, 40, 0.25);
+  border: 4px solid #fffdf9;
+  flex-shrink: 0;
+}
+ 
+.note-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 20%;
+}
+ 
+.note-title {
+  text-align: center;
+  font-size: 19px;
+  color: #4a0a17;
+  font-weight: bold;
+  font-style: normal;
+  line-height: 1.4;
+  margin-bottom: 18px;
+  font-family: 'Georgia', serif;
+}
+ 
+.note-box {
+  background: #fffdf9;
+  border-radius: 14px;
+  padding: 18px 20px;
+  width: 100%;
+  max-width: 320px;
+  box-shadow: 0 6px 16px rgba(122, 20, 40, 0.12);
+  overflow-y: auto;
+  flex: 1;
+  max-height: 190px;
+}
+ 
+.note-text {
+  font-size: 12.5px;
+  color: #4a3b3e;
+  line-height: 1.6;
+  margin-bottom: 12px;
+  font-family: 'Georgia', serif;
+}
+ 
+.note-text:last-child {
+  margin-bottom: 0;
+}
+ 
+.note-signature {
+  text-align: center;
+  margin-top: 16px;
+  font-size: 14px;
+  font-style: italic;
+  color: #6e0f22;
+}
+ 
+/* ---------- Scene 4: Our gallery ---------- */
+.scene-gallery {
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.85);
+  align-items: center;
+  justify-content: flex-start;
+  padding: 20px 0 20px;
+}
+ 
+.card.show-gallery .scene-gallery {
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1);
+}
+ 
+.card.show-gallery .scene-page2 {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-20px);
+}
+ 
+.gallery-title {
+  font-style: italic;
+  font-size: 24px;
+  color: #6e0f22;
+  margin: 6px 0 12px;
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+ 
+.board {
+  position: relative;
+  width: 92%;
+  height: 380px;
+  max-height: 60vh;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(255,255,255,0.05) 1px, transparent 1px),
+    radial-gradient(circle at 70% 60%, rgba(255,255,255,0.05) 1px, transparent 1px),
+    linear-gradient(160deg, #c8935f, #b57e4a);
+  background-size: 6px 6px, 7px 7px, cover;
+  border-radius: 10px;
+  box-shadow: inset 0 0 30px rgba(0,0,0,0.25), 0 8px 20px rgba(0,0,0,0.15);
+  border: 8px solid #8a5a34;
+}
+ 
+.photo-board {
+  position: relative;
+  width: 100%;
+  height: 620px;
+}
+ 
+.polaroid {
+  position: absolute;
+  background: #fffdf9;
+  padding: 6px 6px 18px;
+  border-radius: 2px;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.3);
+  z-index: 2;
+}
+ 
+.polaroid img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 1px;
+  object-fit: cover;
+}
+ 
+.polaroid::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-3deg);
+  width: 34px;
+  height: 14px;
+  background: rgba(255, 244, 200, 0.55);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+}
+ 
+.sticker {
+  position: absolute;
+  z-index: 3;
+  line-height: 1;
+  pointer-events: none;
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,0.25));
+}
+ 
+.polaroid { width: 78px; }
+ 
+.p1 { top: 8px;   left: 10px;  transform: rotate(-8deg); }
+.p2 { top: 2px;   left: 100px; transform: rotate(5deg); }
+.p3 { top: 10px;  left: 192px; transform: rotate(-5deg); }
+.p4 { top: 4px;   left: 280px; transform: rotate(9deg); }
+.p5 { top: 128px; left: 56px;  transform: rotate(7deg); z-index: 4; }
+.p6 { top: 138px; left: 148px; transform: rotate(-9deg); z-index: 5; }
+.p7 { top: 122px; left: 240px; transform: rotate(4deg); }
+.p8 { top: 248px; left: 10px;  transform: rotate(-6deg); }
+.p9 { top: 254px; left: 100px; transform: rotate(6deg); }
+.p10 { top: 250px; left: 192px; transform: rotate(-5deg); }
+.p11 { top: 244px; left: 280px; transform: rotate(8deg); }
+ 
+.sticker { font-size: 22px; }
+ 
+.s1  { top: 0px;   left: 82px;  font-size: 20px; z-index: 6; }
+.s2  { top: 106px; left: 6px;   font-size: 20px; transform: rotate(-10deg); z-index: 6; }
+.s3  { top: 92px;  left: 208px; font-size: 20px; transform: rotate(8deg); z-index: 6; }
+.s4  { top: -2px;  left: 262px; font-size: 20px; transform: rotate(-6deg); z-index: 6; }
+.s5  { top: 218px; left: 128px; font-size: 20px; transform: rotate(5deg); z-index: 6; }
+.s6  { top: 106px; left: 350px; font-size: 20px; transform: rotate(12deg); z-index: 6; }
+.s7  { top: 300px; left: 130px; z-index: 6; }
+.s8  { top: 200px; left: 350px; font-size: 20px; transform: rotate(-8deg); z-index: 6; }
+.s9  { top: 300px; left: 8px;   z-index: 6; }
+.s10 { top: 210px; left: 4px;   font-size: 20px; z-index: 6; }
+.s11 { top: 340px; left: 130px; font-size: 20px; transform: rotate(-9deg); z-index: 6; }
+ 
+.text-sticker {
+  font-family: 'Georgia', serif;
+  font-style: italic;
+  font-size: 12px;
+  color: #a83a52;
+  background: #fff6e8;
+  padding: 3px 8px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  transform: rotate(-4deg);
+  white-space: nowrap;
+}
+ 
+@media (max-width: 700px) {
+  .card {
+    width: 92vw;
+    height: 560px;
+  }
+  .scene-page2 {
+    gap: 28px;
+  }
+  .icon-box {
+    width: 62px;
+    height: 62px;
+  }
+  .note-photo-wrap {
+    width: 160px;
+    height: 160px;
+    margin-top: 20px;
+  }
+  .note-box {
+    max-height: 200px;
+  }
+  .board {
+    height: 420px;
+  }
+  .polaroid {
+    width: 90px !important;
+  }
+}
+ /* ---------- Scene 5: Song for MJ ---------- */
+.scene-song {
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.85);
+  padding: 24px 24px 22px;
+  justify-content: flex-start;
+  gap: 0;
+}
+
+.card.show-song .scene-song {
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1);
+}
+
+.card.show-song .scene-page2 {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-20px);
+}
+
+.song-video-wrap {
+  width: 100%;
+  max-width: 340px;
+  aspect-ratio: 16 / 9;
+  margin: 34px auto 16px;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 10px 24px rgba(122, 20, 40, 0.25);
+  border: 4px solid #fffdf9;
+  flex-shrink: 0;
+}
+
+.song-video-wrap iframe {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.song-title {
+  text-align: center;
+  font-size: 20px;
+  color: #4a0a17;
+  font-weight: bold;
+  font-style: italic;
+  margin-bottom: 2px;
+  font-family: 'Georgia', serif;
+}
+
+.song-artist {
+  text-align: center;
+  font-size: 13px;
+  color: #9a4a56;
+  font-style: italic;
+  margin-bottom: 14px;
+  letter-spacing: 0.5px;
+}
+
+.song-box {
+  background: #fffdf9;
+  border-radius: 14px;
+  padding: 16px 20px;
+  width: 100%;
+  max-width: 320px;
+  box-shadow: 0 6px 16px rgba(122, 20, 40, 0.12);
+  overflow-y: auto;
+  flex: 1;
+  max-height: 130px;
+}
+
+.song-text {
+  font-size: 12.5px;
+  color: #4a3b3e;
+  line-height: 1.6;
+  font-family: 'Georgia', serif;
+}
+
+@media (max-width: 700px) {
+  .song-video-wrap {
+    margin-top: 20px;
+  }
+  .song-box {
+    max-height: 150px;
+  }
+}
+/* ---------- Lightbox ---------- */
+.lightbox {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 50;
+  border-radius: 16px;
+  padding: 30px;
+}
+
+.lightbox.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.lightbox img {
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 10px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  transform: scale(0.85);
+  transition: transform 0.3s ease;
+  cursor: zoom-out;
+}
+
+.lightbox.active img {
+  transform: scale(1);
+}
+
+.polaroid {
+  cursor: zoom-in;
+}
